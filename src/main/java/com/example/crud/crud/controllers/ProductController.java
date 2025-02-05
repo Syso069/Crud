@@ -31,7 +31,7 @@ public class ProductController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity<Product> updateProduct(@RequestBody @Valid RequestProduct data){
+    public ResponseEntity updateProduct(@RequestBody @Valid RequestProduct data){
         Optional<Product> optionalProduct = repository.findById(data.id());
         if (optionalProduct.isPresent()){
             Product product = optionalProduct.get();
