@@ -1,7 +1,8 @@
 package com.example.crud.crud.controllers;
 
-import com.example.crud.crud.domain.product.Product;
-import com.example.crud.crud.domain.product.RequestProduct;
+import com.example.crud.crud.domain.Product;
+import com.example.crud.crud.domain.RequestProduct;
+import com.example.crud.crud.service.ServiceProduct;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +15,25 @@ import java.util.Optional;
 @RequestMapping ("/product")
 public class ProductController {
     @Autowired
-    private ProductRepository repository;
+    private ServiceProduct serviceProduct;
 
     @GetMapping
     public ResponseEntity getAllProducts() {
-        var allProducts = repository.findAll();
+        var allProducts = serviceProduct.pegaProducts();
         return ResponseEntity.ok(allProducts);
     }
 
     @PostMapping
     public ResponseEntity registerProduct(@RequestBody @Valid RequestProduct data){
         Product newProduct = new Product(data);
-        repository.save(newProduct);
+        serviceProduct.salvaNovoProduto(newProduct);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity updateProduct(@RequestBody @Valid RequestProduct data){
-        Optional<Product> optionalProduct = repository.findById(data.id());
+        Optional<Product> optionalProduct = serviceProduct.pegaProdutsId(data.id());
         if (optionalProduct.isPresent()){
             Product product = optionalProduct.get();
             product.setName(data.name());
@@ -45,7 +46,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable String id){
-        repository.deleteById(id);
+        serviceProduct.deletaProdutsId(id);
         return ResponseEntity.noContent().build();
     }
 }

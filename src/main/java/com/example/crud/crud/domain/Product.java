@@ -1,4 +1,4 @@
-package com.example.crud.crud.domain.product;
+package com.example.crud.crud.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
